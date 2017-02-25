@@ -66,7 +66,7 @@
 					"name" : "phones_brand",
 					"rus_name" : "Марка телефона",
 					"type" : "select",
-					"xpath" : "//span[@id='phones_brand-button']/span[@class='ui-selectmenu-text']",
+					"xpath" : "//span[@id='phones_brand-button']",
 					"xpath_ui" : "//ul[@id='phones_brand-menu']",
 					"values" : ["Acer", "Alcatel", "Apple", "BlackBerry", "Explay", "Fly", "HTC", "Huawei", "Lenovo", "Lexand", "LG", "Motorola", "MTC", "Nokia", "Phillips", "Prestigio", "Samsung", "Siemens", "SkyLink", "Sony", "Vertu", "Xiaomi", "ZTE", "Другие марки"]
 				}
@@ -88,7 +88,7 @@
 					"name" : "video_tv_brand",
 					"rus_name" : "Производитель",
 					"type" : "select",
-					"xpath" : "//span[@id='video_tv_brand-button']/span[@class='ui-selectmenu-text']",
+					"xpath" : "//*[@id='video_tv_brand-button']/span[2]",
 					"xpath_ui" : "//ul[@id='video_tv_brand-menu']",
 					"values" : ["Витязь", "AKAI", "BBK", "BEKO", "DEXP", "Erisson", "Funai", "GoldStar", "Grundig", "Haier", "Hitachi", "Horizont", "Hyundai", "Izumi", "JVC", "LG", "Mystery", "Panasonic", "Philips", "Rolsen", "Rubin", "Samsung", "Sharp", "Shivaki", "Sony", "Supra", "TCL", "TELEFUNKEN", "Thomson", "Toshiba", "VITEK", "Другой"]
 

@@ -1,44 +1,29 @@
 import json
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-
-# крч по поводу того, что за ересь этот db.json
-# все данные для выкладки можно представить в формате
-# название, имя на русском, тип, xpath.
-# чтобы не прописывать всю эту херню и добавить немного динамики, я вынес большую часть всей той херни с данными в
-# json документ, и для выкладки подтягиваю их оттуда. Таким образом проге по сути похер откуда тянуть данные, она
-# их тупо выкладывает. Вооооот.
-# БД имеет следующую структуру:
-# в элементе common хранится инфа обо всех общих данных каждого товара. Всякие там названия, описания, состояние и
-# прочая херь.
-# потом идет элемент not_common
-# В not_common хранятся поименованные элементы, отвечающие за данные, специализированные для каждой конкретной
-# категории. Типа размер для обуви, диагональ для телика и прочая херня. Плюс все это сдобрено кучей xpath-ов
-# и всяких там наименований. Соответственно, вообще все данные, необходимые для выкладки товара определенной
-# категории, будут являтся сумммой всех данных из common и данных из элемента not_common, имя которого совпадает
-# с названием категории. То бишь крч все круто и няняня, но если еще начнет работать - будет в два раза круче.
-
-# А, да, чуть не забыл. Мобильники выкладываются хорошо, вообще прям без проблем, ммммм как здорово, но как только
-# пытаюсь выложить что-то из другой категории - вылетает на первом же элементе из not_common. На марке. И я хз
-# че делать. Вот прям вообще хз хз хз.
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 # выбор пункта в ниспадающем списке
 # browser - драйвер, xpath_click - xpath, который нужно кликнуть для того, чтобы ниспадающий список ниспал,
-# xpath_ui - общий адрес ui, содержащий список li-шных пунктов меню, string - строка, пункт с коротой нужно
-# выбрать. Ну типа из списка меню выбрать марку - тогда в string передается именно марка.
+# xpath_ui - общий адрес ui, содержащий список li-шных пунктов меню, string - строка, пункт с которой нужно
+# выбрать.
 def select_in_select(browser, xpath_click, xpath_ui, string):
     try:
         # поиск элемента, по которому нужно кликнуть, чтобы появился список
         # с ожиданием!
-        element = WebDriverWait(browser, 10).until(
-            EC.presence_of_element_located((By.XPATH, xpath_click))
+        # action_chain = ActionChains(browser)
+        element = WebDriverWait(browser, 100).until(
+            EC.element_to_be_clickable((By.XPATH, xpath_click))
         )
-        element.click()
+        # action_chain.move_to_element_with_offset(element, 1, 1).click().perform()
 
+        # script = 'document.getElementByXpath("'+xpath_click+'").click()'
+        element.click()
+        # browser.execute_script(script)
         # поиск ui с пунктами меню
         ui = WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.XPATH, xpath_ui))
@@ -48,7 +33,6 @@ def select_in_select(browser, xpath_click, xpath_ui, string):
         li_s = ui.find_elements_by_tag_name("li")
 
         # поиск элемента, текст которого соответствует требуемому.
-        # (крч поиск правильного элемента)
         right_elem = li_s[0]
         for li in li_s:
             div = li.find_element_by_tag_name("div")
@@ -59,7 +43,6 @@ def select_in_select(browser, xpath_click, xpath_ui, string):
     finally:
         # browser.quit()
         i = 1
-
 
 # функция входа в аккаунт
 def login(username, password, browser):
@@ -142,7 +125,7 @@ def choose_category(category_name, db, browser):
     selector1 = category['category_selector1']
     # селектор2 = выбирает пункт во вторичном меню
     selector2 = category['category_selector2']
-    # а тут крч пошел выбор данных
+    # выбор данных
     try:
         # ожидание подгрузки элемента, который открывает ниспадающий список
         element = WebDriverWait(browser, 10).until(
@@ -172,9 +155,6 @@ def main():
     # установка опций браузера (открытие в полном размере окна)
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
-    # если юзаешь другой браузер - закомменть две предыдущие строки
-    # но не советую, потому что в мозиле не работает клик по li элементу, и соответственно моя функция
-    # select_in_select. Такие дела.
     browser = webdriver.Chrome(chrome_options=options)
     # открытие и обработка файла db.json
     db_file = open('./db.json', 'r')
@@ -200,7 +180,7 @@ def main():
     # выкладка данных
     posting(browser, data)
 
-    # ожидание (позырить, че как где произошло)
+    # ожидание
     print("wait")
     wait = input()
 
