@@ -15,12 +15,13 @@ def start()
 def si
 def post(driver,type,name,info,author,params,cost):'''
 driver.get('http://www.pulscen.by/')
-ait = WebDriverWait(driver,100).until(EC.presence_of_element_located((By.XPATH,'//span[@class="toolbar-link js-toolbar-link-enter"]')))
+wait = WebDriverWait(driver,100).until(EC.presence_of_element_located((By.XPATH,'//span[@class="toolbar-link js-toolbar-link-enter"]')))
 driver.find_element(By.XPATH, '//span[@class="toolbar-link js-toolbar-link-enter"]').click()
 wait = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.XPATH, '//input[@name="session[email]"]')))
 driver.find_element(By.XPATH, '//input[@name="session[email]"]').send_keys("user120895@gmail.com")
 driver.find_element(By.XPATH, '//input[@name="session[password]"]').send_keys("siniza314")
 driver.find_element(By.XPATH, '//input[@class="subm-"]').click()
+
 wait = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.XPATH, '//a[@class="toolbar-link toolbar-link-button add-product js-ga-link"]')))
 driver.find_element(By.XPATH, '//a[@class="toolbar-link toolbar-link-button add-product js-ga-link"]').click()
 wait = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.XPATH, '//input[@id="product_name"]')))
