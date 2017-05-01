@@ -1,0 +1,7 @@
+.idea
+.python-version
+.env
+.cache
+
+pip-log.txt
+
