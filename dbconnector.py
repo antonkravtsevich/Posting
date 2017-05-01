@@ -117,7 +117,7 @@ def kufar_processing(advert_category_id, advert_data):
     kufar_all_data = {'category_xpath': kufar_category_xpath,
                       'posting_data': kufar_posting_data}
     # выкладка данных на куфар
-    posting_on_kufar(full_data=kufar_all_data)
+    return posting_on_kufar(full_data=kufar_all_data)
 
 
 def pulscen_processing(advert_category_id, advert_data):
@@ -151,7 +151,15 @@ def pulscen_processing(advert_category_id, advert_data):
     puls_all_data = {'category_xpath': puls_category_xpath,
                      'posting_data': puls_posting_data}
     # выкладка данных на куфар
-    posting_on_puls(full_data=puls_all_data)
+    return posting_on_puls(full_data=puls_all_data)
+
+
+def set_puls_status(id, status):
+    execute_sql("UPDATE `ap4up2`.`app_actions` SET `app_pulscen_status`='"+str(status)+"' WHERE `id_actions`="+str(id)+";")
+
+
+def set_kufar_status(id, status):
+    execute_sql("UPDATE `ap4up2`.`app_actions` SET `app_kufar_status`='"+str(status)+"' WHERE `id_actions`="+str(id)+";")
 
 
 def action_processing(action):
@@ -166,10 +174,15 @@ def action_processing(action):
     # получение данных объявления
     advert_data = json.loads(advert['advert_data_json'])
 
-    # kufar_processing(advert_category_id=advert_category_id,
-    #                 advert_data=advert_data)
-    pulscen_processing(advert_category_id=advert_category_id,
-                       advert_data=advert_data)
+    kufar_status = kufar_processing(advert_category_id=advert_category_id,
+                                     advert_data=advert_data)
+    print('kufar_status: '+str(kufar_status))
+    set_kufar_status(id=action['id_actions'], status=kufar_status)
+
+    puls_status = pulscen_processing(advert_category_id=advert_category_id,
+                                      advert_data=advert_data)
+    print('puls_status: ' + str(puls_status))
+    set_puls_status(id=action['id_actions'], status=puls_status)
 
 
 def main():

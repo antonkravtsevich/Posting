@@ -160,51 +160,62 @@ def confirm_posting(browser):
 
 
 def main(full_data):
+    status = 1
+    try:
+        print('Start virtual display...')
+        display = Display(visible=0, size=(1366, 768))
+        display.start()
+        print('Done.')
 
-    print('Start virtual display...')
-    display = Display(visible=0, size=(1366, 768))
-    display.start()
-    print('Done.')
+        print('Start posting '+str(full_data['category_xpath']['category_name']))
 
-    print('Start posting '+str(full_data['category_xpath']['category_name']))
+        print('Open browser... ')
+        options = webdriver.ChromeOptions()
+        options.add_argument("--start-maximized")
+        browser = webdriver.Chrome(chrome_options=options)
+        browser.set_window_position(0, 0)
+        browser.set_window_size(1366, 768)
+        print('Done.')
 
-    print('Open browser... ')
-    options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
-    browser = webdriver.Chrome(chrome_options=options)
-    browser.set_window_position(0, 0)
-    browser.set_window_size(1366, 768)
-    print('Done.')
+        print('Get kufar start page... ')
+        browser.implicitly_wait(5)
+        start_url = "https://www.kufar.by/%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C"
+        script = 'window.location.href = "'+start_url+'"'
+        # browser.get(start_url)
+        browser.execute_script(script)
+        wait = WebDriverWait(browser, 5)
+        print('Implicity wait finish')
+        print('Done.')
 
-    print('Get kufar start page... ')
-    browser.implicitly_wait(5)
-    start_url = "https://www.kufar.by/%D0%B1%D0%B5%D0%BB%D0%B0%D1%80%D1%83%D1%81%D1%8C"
-    browser.get(start_url)
-    print('Implicity wait finish')
-    print('Done.')
+        print('Authorization...')
+        username = "user120895@gmail.com"
+        password = "siniza314"
+        browser = login(username, password, browser)
+        print('Done.')
 
-    print('Authorization...')
-    username = "user120895@gmail.com"
-    password = "siniza314"
-    browser = login(username, password, browser)
-    print('Done.')
+        print('Choose category...')
+        choose_category(category_xpath=full_data['category_xpath'],
+                        browser=browser)
+        print('Done.')
 
-    print('Choose category...')
-    choose_category(category_xpath=full_data['category_xpath'],
-                    browser=browser)
-    print('Done.')
+        print('Posting...')
+        posting(browser=browser,
+                posting_data=full_data['posting_data'])
+        print('Done.')
 
-    print('Posting...')
-    posting(browser=browser,
-            posting_data=full_data['posting_data'])
-    print('Done.')
+        print('Sending ads...')
+        # i = input()
+        confirm_posting(browser=browser)
+        print('Done.')
 
-    print('Sending ads...')
-    # confirm_posting(browser=browser)
-    print('Done.')
+        print('Posting finished. Clear memory...')
+        browser.quit()
+        print('Done.')
+        print('Posting cycle finished.')
 
-    print('Posting finished. Clear memory...')
-    browser.quit()
-    display.stop()
-    print('Done.')
-    print('Posting cycle finished.')
+    except Exception as e:
+        print(e.__traceback__)
+        status = 2
+    finally:
+        display.stop()
+    return status

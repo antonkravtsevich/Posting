@@ -57,45 +57,55 @@ def confirm_posting(browser):
     browser.find_element(By.XPATH, "//input[@class='uf-sbm js-uf-sbm-add-product']").click()
 
 def main(full_data):
-    print('Start virtual display...')
-    display = Display(visible=0, size=(1366, 768))
-    display.start()
-    print('Done.')
+    status = 1
+    try:
+        print('Start virtual display...')
+        display = Display(visible=0, size=(1366, 768))
+        display.start()
+        print('Done.')
 
-    print('Start posting '+str(full_data['category_xpath']['category_name']))
+        print('Start posting '+str(full_data['category_xpath']['category_name']))
 
-    print('Open browser... ')
-    options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
-    browser = webdriver.Chrome(chrome_options=options)
-    print('Done.')
+        print('Open browser... ')
+        options = webdriver.ChromeOptions()
+        options.add_argument("--start-maximized")
+        browser = webdriver.Chrome(chrome_options=options)
+        print('Done.')
 
-    print('Get pulscen start page... ')
-    start_url = 'http://www.pulscen.by/'
-    browser.get(start_url)
-    print('Done.')
+        print('Get pulscen start page... ')
+        start_url = 'http://www.pulscen.by/'
+        browser.get(start_url)
+        print('Done.')
 
-    print('Authorization...')
-    username = "user120895@gmail.com"
-    password = "siniza314"
-    browser = login(username, password, browser)
-    print('Done.')
+        print('Authorization...')
+        username = "user120895@gmail.com"
+        password = "siniza314"
+        browser = login(username, password, browser)
+        print('Done.')
 
-    print('Choose category...')
-    browser = choose_category(category_xpath=full_data['category_xpath'],
-                              browser=browser)
-    print('Done.')
+        print('Choose category...')
+        browser = choose_category(category_xpath=full_data['category_xpath'],
+                                  browser=browser)
+        print('Done.')
 
-    print('Posting...')
-    posting(browser=browser,
-            posting_data=full_data['posting_data'])
-    print('Done.')
+        print('Posting...')
+        posting(browser=browser,
+                posting_data=full_data['posting_data'])
+        print('Done.')
 
-    print('Sending ads...')
-    confirm_posting(browser=browser)
-    print('Done.')
+        print('Sending ads...')
+        # i = input()
+        confirm_posting(browser=browser)
+        print('Done.')
 
-    print('Posting finished. Clear memory...')
-    browser.quit()
-    display.stop()
-    print('Done.')
+        print('Posting finished. Clear memory...')
+        browser.quit()
+        display.stop()
+        print('Done.')
+
+    except Exception as e:
+        print(e.__traceback__)
+        status = 2
+    finally:
+        display.stop()
+    return status
