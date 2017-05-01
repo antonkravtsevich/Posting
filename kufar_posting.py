@@ -200,7 +200,7 @@ def main(full_data):
     print('Done.')
 
     print('Sending ads...')
-    confirm_posting(browser=browser)
+    # confirm_posting(browser=browser)
     print('Done.')
 
     print('Posting finished. Clear memory...')

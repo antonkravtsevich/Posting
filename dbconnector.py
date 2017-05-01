@@ -133,19 +133,19 @@ def pulscen_processing(advert_category_id, advert_data):
                                        id=advert_category_id)
     # получение json-а для выкладки данных на пульс
 
-    print('puls_category_xpath')
-    print(puls_category_xpath)
-    print('puls_common_parameters_xpath')
-    print(puls_common_parameters_xpath)
-    print('puls_parametrs_xpath')
-    print(puls_parameters_xpath)
-    print('data')
-    print(advert_data)
+    # print('puls_category_xpath')
+    # print(puls_category_xpath)
+    # print('puls_common_parameters_xpath')
+    # print(puls_common_parameters_xpath)
+    # print('puls_parametrs_xpath')
+    # print(puls_parameters_xpath)
+    # print('data')
+    # print(advert_data)
     puls_posting_data = create_posting_data_for_puls(data=advert_data,
                                                      common_parametrs=puls_common_parameters_xpath,
                                                      parametrs=puls_parameters_xpath)
-    print('posting_data')
-    print(puls_posting_data)
+    # print('posting_data')
+    # print(puls_posting_data)
 
     # получение полных данных для перехода к категории и выкладки данных
     puls_all_data = {'category_xpath': puls_category_xpath,
@@ -166,10 +166,10 @@ def action_processing(action):
     # получение данных объявления
     advert_data = json.loads(advert['advert_data_json'])
 
-    kufar_processing(advert_category_id=advert_category_id,
-                    advert_data=advert_data)
-    # pulscen_processing(advert_category_id=advert_category_id,
-    #                    advert_data=advert_data)
+    # kufar_processing(advert_category_id=advert_category_id,
+    #                 advert_data=advert_data)
+    pulscen_processing(advert_category_id=advert_category_id,
+                       advert_data=advert_data)
 
 
 def main():
